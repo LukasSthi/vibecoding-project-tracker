@@ -116,7 +116,7 @@ Fill in the owner column. Recommended default in **bold**; change if your team h
 | 9 | `context` | Context field on the task modal | **C** | `Ben` |
 | 10 | `copy-prompt` | "Copy as Prompt Context" button | **A** | `Lukas` |
 | 11 | `anchors` | Deliverable Anchor Board | **C** | `Ben` |
-| 12 | `secret-sauce` | The one thing that makes it yours | **B** | `Marcel` |
+| 12 | `secret-suace` | The one thing that makes it yours | **B** | `Marcel` |
 | 13 | `pitch-ready` | Demo + pitch rehearsal | **All** | `Marcel` |
 
 
