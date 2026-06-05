@@ -26,4 +26,11 @@
     font-style: italic;
     font-display: swap;
   }
+
+  body {
+  /* This forces EVERY piece of text to use SST Light by default */
+  font-family: 'SST Light', sans-serif;
+  background-color: #5C76FF; 
+  color: #FFFFFF;
+}
 }

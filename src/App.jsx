@@ -281,8 +281,8 @@ export default function App() {
 
       <header className="mb-6 flex items-end justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-wide">
-            Vibecoding Project Tracker
+          <h1 className="text-4xl font-heading text-white tracking-widest-ps uppercase drop-shadow-md">
+            PLAYTRACK
           </h1>
           <p className="text-sm text-brand-accent/80">
             Manly Mod-Rock
@@ -318,7 +318,7 @@ export default function App() {
             key={stage.id}
             className="rounded-lg bg-slate-900/40 backdrop-blur-md p-4 text-white shadow-lg border border-white/10"
           >
-            <h2 className="mb-4 font-bold tracking-wider">
+            <h2 className="mb-4 text-xl font-heading tracking-widest uppercase">
               {stage.label}
             </h2>
 
@@ -333,15 +333,15 @@ export default function App() {
                       setEditing(task);
                     }}
                     className={`
-  cursor-pointer rounded text-slate-900 p-3 shadow
-  hover:shadow-[0_0_15px_2px_rgba(255,255,255,0.3)]
-  hover:border-white
-  border border-transparent
-  transition-all
+                      cursor-pointer rounded text-slate-900 p-3 shadow
+                      hover:shadow-[0_0_15px_2px_rgba(255,255,255,0.3)]
+                      hover:border-white
+                      border border-transparent
+                      transition-all
 
-  ${getTaskTypeClasses(task.type)}
-  ${getDueDateClasses(task)}
-`}
+                      ${getTaskTypeClasses(task.type)}
+                      ${getDueDateClasses(task)}
+                    `}
                   >
                     <div className="flex items-start justify-between">
                       <p className="font-semibold">
@@ -379,8 +379,8 @@ export default function App() {
                     </div>
 
                     <p className="mt-2 text-xs font-semibold">
-  Due: {task.dueDate || '-'}
-</p>
+                      Due: {task.dueDate || '-'}
+                    </p>
                     
                   </div>
                 ))}
