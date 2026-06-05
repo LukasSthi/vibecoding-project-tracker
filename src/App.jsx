@@ -253,6 +253,10 @@ export default function App() {
     {task.title}
   </p>
 
+  <p className="text-xs text-slate-400">
+  ID: {task.id}
+</p>
+
   <span className="text-lg">
     {task.type === 'feature' ? '✨' : '🐞'}
   </span>
