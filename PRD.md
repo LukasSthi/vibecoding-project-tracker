@@ -117,8 +117,7 @@ Fill in the owner column. Recommended default in **bold**; change if your team h
 | 10 | `copy-prompt` | "Copy as Prompt Context" button | **A** | `Lukas` |
 | 11 | `anchors` | Deliverable Anchor Board | **C** | `Ben` |
 | 12 | `secret-suace` | The one thing that makes it yours | **B** | `Marcel` |
-| 13 | `pitch-ready` | Demo + pitch rehearsal | **All** | `Marcel` |
-
+| 13 | `pitch-ready` | Demo + pitch rehearsal | **All** | `Marcel (70%), Ben(10%), Lukas(20%)` |
 
 Track A owns the state model and task ownership. Track B owns the visuals (and design — M3 runs parallel to M2 so the team starts Phase 3 with the palette already chosen). Track C owns the differentiator features (M9 + M10 — the context field and the Copy-as-Prompt button) and usually leads on M12 secret-sauce. Put your strongest prompter on Track C.
 
