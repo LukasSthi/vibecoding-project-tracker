@@ -221,40 +221,57 @@ function getTaskTypeClasses(type) {
     : 'border-l-4 border-type-bug';
 }
 
-function getDueDateClasses(task) {
-  if (task.status === 'done') {
-    return 'border-l-8 border-slate-400 bg-slate-200 text-slate-600';
-  }
+function getDueState(task) {
+  if (task.status === 'done') return 'done';
+  if (!task.dueDate) return 'none';
 
-  if (!task.dueDate) {
-    return 'border-l-8 border-slate-200 bg-white';
-  }
-
-  // Normalize: always compare end of day
   const due = new Date(task.dueDate + 'T23:59:59');
   const now = new Date();
 
-  const diffMs = due.getTime() - now.getTime();
+  const diffMs = due - now;
   const diffHours = diffMs / (1000 * 60 * 60);
   const diffDays = diffHours / 24;
 
-  // 🔴 Past due (alarm)
+  if (diffMs < 0) return 'alarm';
+  if (diffHours < 24) return 'warning';
+  if (diffDays > 2) return 'calm';
+
+  return 'calm';
+}
+
+function getDueDateClasses(task) {
+  if (task.status === 'done') {
+    return 'bg-slate-100 text-slate-500';
+  }
+
+  if (!task.dueDate) {
+    return 'bg-white';
+  }
+
+  const due = new Date(task.dueDate + 'T23:59:59');
+  const now = new Date();
+
+  const diffMs = due - now;
+  const diffHours = diffMs / (1000 * 60 * 60);
+  const diffDays = diffHours / 24;
+
+  // 🔴 past due
   if (diffMs < 0) {
-    return 'border-l-8 border-red-500 bg-white';
+    return 'bg-red-100 text-red-900';
   }
 
-  // 🟡 < 24h (warning)
+  // 🟡 < 24h
   if (diffHours <= 24) {
-    return 'border-l-8 border-yellow-400 bg-white';
+    return 'bg-yellow-100 text-yellow-900';
   }
 
-  // 🟢 > 2 days (calm)
+  // 🟢 > 2 days
   if (diffDays > 2) {
-    return 'border-l-8 border-green-500 bg-white';
+    return 'bg-green-100 text-green-900';
   }
 
-  // 🔵 fallback (still calm-ish / normal range)
-  return 'border-l-8 border-blue-400 bg-white';
+  // 🔵 normal range
+  return 'bg-blue-50 text-blue-900';
 }
 
  async function copyContextToClipboard(task) {
