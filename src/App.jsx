@@ -223,26 +223,53 @@ function getDueDateClasses(task) {
     return 'border-l-8 border-slate-200 bg-white';
   }
 
+  // Normalize: always compare end of day
+  const due = new Date(task.dueDate + 'T23:59:59');
   const now = new Date();
-  const due = new Date(task.dueDate);
 
-  const diffMs = due - now;
+  const diffMs = due.getTime() - now.getTime();
   const diffHours = diffMs / (1000 * 60 * 60);
   const diffDays = diffHours / 24;
 
+  // 🔴 Past due (alarm)
   if (diffMs < 0) {
     return 'border-l-8 border-red-500 bg-white';
   }
 
+  // 🟡 < 24h (warning)
   if (diffHours <= 24) {
     return 'border-l-8 border-yellow-400 bg-white';
   }
 
+  // 🟢 > 2 days (calm)
   if (diffDays > 2) {
     return 'border-l-8 border-green-500 bg-white';
   }
 
+  // 🔵 fallback (still calm-ish / normal range)
   return 'border-l-8 border-blue-400 bg-white';
+}
+
+ async function copyContextToClipboard(task) {
+  const content = `
+# ${task.title}
+
+## Description
+${task.description || '-'}
+
+## Context
+${task.context || '-'}
+
+---
+
+## Metadata
+- Type: ${task.type}
+- Status: ${task.status}
+- Assignee: ${task.assignee}
+- Due: ${task.dueDate || '-'}
+`.trim();
+
+  await navigator.clipboard.writeText(content);
 }
 
 export default function App() {
@@ -381,6 +408,15 @@ export default function App() {
                     <p className="mt-2 text-xs font-semibold">
                       Due: {task.dueDate || '-'}
                     </p>
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+    copyContextToClipboard(task);
+  }}
+  className="mt-2 text-xs px-2 py-1 rounded border border-slate-400 bg-white text-slate-900 hover:bg-slate-100"
+>
+  Copy Context
+</button>
                     
                   </div>
                 ))}
@@ -446,9 +482,18 @@ function TaskModal({ task, onSave, onDelete, onClose }) {
           className="mb-3 w-full border p-2 text-slate-900 rounded"
         />
 
-<label className="mb-1 block text-sm text-slate-700 font-semibold">
-  Context
-</label>
+<div className="mb-1 flex items-center justify-between">
+  <label className="text-sm text-slate-700 font-semibold">
+    Context
+  </label>
+
+  <button
+    onClick={() => copyContextToClipboard(form)}
+    className="text-xs px-2 py-1 rounded border border-slate-400 bg-white text-slate-800 hover:bg-slate-100 font-medium"
+  >
+    Copy Prompt
+  </button>
+</div>
         <textarea
   value={form?.context ?? ''}
   onChange={(e) => {
@@ -557,6 +602,8 @@ function TaskModal({ task, onSave, onDelete, onClose }) {
           </button>
 
           <div className="space-x-2">
+
+
             <button
               onClick={() => {
                 playClick(); // PLAYS THE CLICK SOUND
@@ -581,4 +628,4 @@ function TaskModal({ task, onSave, onDelete, onClose }) {
       </div>
     </div>
   );
-}
+} 
