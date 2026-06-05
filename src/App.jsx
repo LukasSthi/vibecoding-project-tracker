@@ -191,6 +191,37 @@ function getTaskTypeClasses(type) {
     : 'border-l-4 border-type-bug';
 }
 
+function getDueDateClasses(task) {
+  if (task.status === 'done') {
+    return 'border-l-8 border-slate-400 bg-slate-200 text-slate-600';
+  }
+
+  if (!task.dueDate) {
+    return 'border-l-8 border-slate-200 bg-white';
+  }
+
+  const now = new Date();
+  const due = new Date(task.dueDate);
+
+  const diffMs = due - now;
+  const diffHours = diffMs / (1000 * 60 * 60);
+  const diffDays = diffHours / 24;
+
+  if (diffMs < 0) {
+    return 'border-l-8 border-red-500 bg-white';
+  }
+
+  if (diffHours <= 24) {
+    return 'border-l-8 border-yellow-400 bg-white';
+  }
+
+  if (diffDays > 2) {
+    return 'border-l-8 border-green-500 bg-white';
+  }
+
+  return 'border-l-8 border-blue-400 bg-white';
+}
+
 export default function App() {
   const [tasks, setTasks] = useLocalStorage(
     'vibetracker.tasks',
@@ -270,13 +301,15 @@ export default function App() {
                       setEditing(task);
                     }}
                     className={`
-                      cursor-pointer rounded bg-white text-slate-900 p-3 shadow
-                      hover:shadow-[0_0_15px_2px_rgba(255,255,255,0.3)]
-                      hover:border-white
-                      border border-transparent
-                      transition-all
-                      ${getTaskTypeClasses(task.type)}
-                    `}
+  cursor-pointer rounded text-slate-900 p-3 shadow
+  hover:shadow-[0_0_15px_2px_rgba(255,255,255,0.3)]
+  hover:border-white
+  border border-transparent
+  transition-all
+
+  ${getTaskTypeClasses(task.type)}
+  ${getDueDateClasses(task)}
+`}
                   >
                     <div className="flex items-start justify-between">
                       <p className="font-semibold">
@@ -313,9 +346,9 @@ export default function App() {
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-400 mt-2">
-                      Due: {task.dueDate || '-'}
-                    </p>
+                    <p className="mt-2 text-xs font-semibold">
+  Due: {task.dueDate || '-'}
+</p>
                     
                   </div>
                 ))}
