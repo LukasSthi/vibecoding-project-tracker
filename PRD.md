@@ -143,7 +143,7 @@ Keep the Context field of each real task up to date as you work. By the end of t
 
 Fill in:
 
-- **Team name:** `<TODO>`
+- **Team name:** `Manly Mod-Rock`
 - **Tagline (one sentence):** `<TODO>`
 - **Tracker URL after deploy:** `<TODO>` (Vercel will give it to you)
 
