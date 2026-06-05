@@ -95,9 +95,9 @@ Fill these in before tagging `prd-done`:
 
 | Slot | Name | GitHub handle |
 |---|---|---|
-| Teammate A | `<TODO>` | `<TODO>` |
-| Teammate B | `<TODO>` | `<TODO>` |
-| Teammate C | `<TODO>` | `<TODO>` |
+| Teammate A | `Lukas ` | `LukasSthi` |
+| Teammate B | `Marcel` | `askoneo` |
+| Teammate C | `Ben` | `BjoernSWE` |
 
 These three names become the **only** allowed values for `Task.assignee`. No auth — just a dropdown.
 
@@ -144,8 +144,8 @@ Keep the Context field of each real task up to date as you work. By the end of t
 Fill in:
 
 - **Team name:** `Manly Mod-Rock`
-- **Tagline (one sentence):** `<TODO>`
-- **Tracker URL after deploy:** `<TODO>` (Vercel will give it to you)
+- **Tagline (one sentence):** `Planned Vibes.`
+- **Tracker URL after deploy:** `https://github.com/LukasSthi/vibecoding-project-tracker` (Vercel will give it to you)
 
 ## 12. Out of scope (do not build)
 
