@@ -30,12 +30,23 @@ export default {
         mono: ['"SST Italic"', 'monospace'],
       },
       boxShadow: {
-        // The console "Active Glow" focus ring (used via shadow-ps-focus)
         'ps-focus': '0 0 15px 2px rgba(255, 255, 255, 0.3)',
       },
       letterSpacing: {
-        // The heavy tracking for the logo wordmark (used via tracking-widest-ps)
         'widest-ps': '0.2em',
+      },
+      // ADD THIS FOR THE BACKGROUND ANIMATION
+      keyframes: {
+        flow: {
+          '0%': { transform: 'translateX(0) scaleY(1)' },
+          '50%': { transform: 'translateX(-25%) scaleY(0.9)' },
+          '100%': { transform: 'translateX(-50%) scaleY(1)' },
+        }
+      },
+      animation: {
+        // We create two speeds so the ribbons overlap naturally
+        'ribbon-fast': 'flow 15s linear infinite',
+        'ribbon-slow': 'flow 25s linear infinite reverse',
       }
     },
   },

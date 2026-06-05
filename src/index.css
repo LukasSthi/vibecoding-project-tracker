@@ -2,13 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: 'SST Condensed Bold';
+    src: url('/fonts/SST-Condensed-Bold.woff2') format('woff2'),
+         url('/fonts/SST-Condensed-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'SST Light';
+    src: url('/fonts/SST-Light.woff2') format('woff2'),
+         url('/fonts/SST-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'SST Italic';
+    src: url('/fonts/SST-Italic.woff2') format('woff2'),
+         url('/fonts/SST-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+}
+
 html, body, #root {
   height: 100%;
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f8fafc; /* slate-50 */
-  color: #0f172a;            /* slate-900 */
+  /* Defaulting to our new body font and background color */
+  font-family: 'SST Light', sans-serif;
+  background-color: #5C76FF; 
+  color: #FFFFFF;
+}
+
+/* Hide scrollbar for the horizontal scrolling layout */
+::-webkit-scrollbar {
+  display: none;
 }
