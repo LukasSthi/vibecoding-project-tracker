@@ -80,9 +80,11 @@ const seedTasks = [
     type: 'feature',
     status: 'todo',
     assignee: 'Lukas',
-    dueDate: null,
-    createdDate: '2025-08-15',
+    startDate: '2025-08-15',
+  dueDate: '2025-08-20',
+  createdDate: '2025-08-15',
   },
+
   {
     id: '2',
     title: 'Fix Navbar Bug',
@@ -90,9 +92,11 @@ const seedTasks = [
     type: 'bug',
     status: 'in-progress',
     assignee: 'Marcel',
-    dueDate: null,
-    createdDate: '2025-08-15',
+    startDate: '2025-08-15',
+  dueDate: '2025-08-20',
+  createdDate: '2025-08-15',
   },
+
   {
     id: '3',
     title: 'Review Board Layout',
@@ -100,9 +104,11 @@ const seedTasks = [
     type: 'feature',
     status: 'review',
     assignee: 'Ben',
-    dueDate: null,
-    createdDate: '2025-08-15',
+    startDate: '2025-08-15',
+  dueDate: '2025-08-20',
+  createdDate: '2025-08-15',
   },
+
   {
     id: '4',
     title: 'Deploy App',
@@ -110,21 +116,62 @@ const seedTasks = [
     type: 'feature',
     status: 'done',
     assignee: 'Lukas',
-    dueDate: null,
-    createdDate: '2025-08-15',
+    startDate: '2025-08-15',
+  dueDate: '2025-08-20',
+  createdDate: '2025-08-15',
   },
 ];
+
+const emptyTask = {
+  id: '',
+  title: '',
+  description: '',
+  type: 'feature',
+  status: 'todo',
+  assignee: 'Lukas',
+  startDate: '',
+  dueDate: '',
+  createdDate: '',
+};
 
 export default function App() {
   // TODO M4 data-model:
   //   const [tasks, setTasks] = useLocalStorage('vibetracker.tasks', [/* 3-4 seed tasks */]);
-  const [tasks] = useLocalStorage(
+  const [tasks, setTasks] = useLocalStorage(
   'vibetracker.tasks',
   seedTasks
-);
+  );
+
+
   //
   // TODO M5 crud-modal:
-  //   const [editing, setEditing] = useState(null);
+  const [editing, setEditing] = useState(null);
+
+  function saveTask(task) {
+  const exists = tasks.some(
+    (t) => t.id === task.id
+  );
+
+  if (exists) {
+    setTasks(
+      tasks.map((t) =>
+        t.id === task.id ? task : t
+      )
+    );
+  } else {
+    setTasks([...tasks, task]);
+  }
+
+  setEditing(null);
+}
+
+function deleteTask(id) {
+  setTasks(
+    tasks.filter((t) => t.id !== id)
+  );
+
+  setEditing(null);
+}
   //
   // TODO M11 anchors:
   //   const [anchors, setAnchors] = useLocalStorage('vibetracker.anchors', [...]);
@@ -141,6 +188,21 @@ export default function App() {
             Manly Mod-Rock
           </p>
         </div>
+        <button
+  onClick={() =>
+    setEditing({
+      ...emptyTask,
+      id: Date.now().toString(),
+      createdDate:
+        new Date()
+          .toISOString()
+          .split('T')[0],
+    })
+  }
+  className="rounded bg-blue-600 px-4 py-2 text-white"
+>
+  +
+</button>
       </header>
 
       {/* TODO M11 anchors: render the Anchor Board (Presentation / Demo / Report / Documentation) above the board. */}
@@ -174,9 +236,10 @@ export default function App() {
           .filter((task) => task.status === stage.id)
           .map((task) => (
             <div
-              key={task.id}
-              className="rounded bg-white p-3 shadow"
-            >
+  key={task.id}
+  onClick={() => setEditing(task)}
+  className="cursor-pointer rounded bg-white p-3 shadow"
+>
               <p className="font-semibold">
                 {task.title}
               </p>
@@ -184,12 +247,182 @@ export default function App() {
               <p className="text-sm text-slate-500">
                 {task.assignee}
               </p>
+
+              <p className="text-xs text-slate-400">
+  Due: {task.dueDate || '-'}
+</p>
             </div>
           ))}
       </div>
     </div>
   ))}
 </main>
+{editing && (
+  <TaskModal
+    task={editing}
+    onSave={saveTask}
+    onDelete={deleteTask}
+    onClose={() => setEditing(null)}
+  />
+)}
+    </div>
+  );
+}
+function TaskModal({
+  task,
+  onSave,
+  onDelete,
+  onClose,
+}) {
+  const [form, setForm] = useState(task);
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black/40">
+      <div className="w-full max-w-lg rounded bg-white p-6">
+
+        <input
+          value={form.title}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              title: e.target.value,
+            })
+          }
+          placeholder="Title"
+          className="mb-3 w-full border p-2"
+        />
+
+        <textarea
+          value={form.description}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              description: e.target.value,
+            })
+          }
+          placeholder="Description"
+          className="mb-3 w-full border p-2"
+        />
+
+        <select
+          value={form.type}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              type: e.target.value,
+            })
+          }
+          className="mb-3 w-full border p-2"
+        >
+          <option value="feature">
+            Feature
+          </option>
+          <option value="bug">
+            Bug
+          </option>
+        </select>
+
+        <select
+          value={form.status}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              status: e.target.value,
+            })
+          }
+          className="mb-3 w-full border p-2"
+        >
+          <option value="todo">To Do</option>
+          <option value="in-progress">
+            In Progress
+          </option>
+          <option value="review">
+            Review
+          </option>
+          <option value="done">
+            Done
+          </option>
+        </select>
+
+        <select
+          value={form.assignee}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              assignee: e.target.value,
+            })
+          }
+          className="mb-3 w-full border p-2"
+        >
+          {TEAM.map((member) => (
+            <option key={member}>
+              {member}
+            </option>
+          ))}
+        </select>
+
+        <label className="mb-1 block text-sm">
+  Start Date
+</label>
+
+<input
+  type="date"
+  value={form.startDate || ''}
+  onChange={(e) =>
+    setForm({
+      ...form,
+      startDate: e.target.value,
+    })
+  }
+  className="mb-3 w-full border p-2"
+/>
+
+<label className="mb-1 block text-sm">
+  Due Date
+</label>
+
+<input
+  type="date"
+  value={form.dueDate || ''}
+  onChange={(e) =>
+    setForm({
+      ...form,
+      dueDate: e.target.value,
+    })
+  }
+  className="mb-3 w-full border p-2"
+/>
+
+        <div className="flex justify-between">
+          <button
+            onClick={() =>
+              onDelete(form.id)
+            }
+            className="rounded bg-red-600 px-4 py-2 text-white"
+          >
+            Delete
+          </button>
+
+          <div className="space-x-2">
+            <button
+              onClick={onClose}
+              className="rounded border px-4 py-2"
+            >
+              Cancel
+            </button>
+
+            <button
+              onClick={() =>
+                onSave(form)
+              }
+              className="rounded bg-green-600 px-4 py-2 text-white"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
