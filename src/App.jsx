@@ -46,6 +46,26 @@ export const STAGES = [
 // They become the only valid values for `Task.assignee`.
 export const TEAM = ['Lukas', 'Marcel', 'Ben'];
 
+const CONTEXT_TEMPLATE = `## Background
+
+## Constraints
+
+## Tried so far
+
+## Pick up
+`;
+
+
+function getRelativeTime(dateString) {
+  if (!dateString) return null;
+
+  const diffMs = new Date() - new Date(dateString);
+  const diffHours = diffMs / (1000 * 60 * 60);
+
+  if (diffHours < 1) return 'just now';
+  if (diffHours < 24) return `${Math.floor(diffHours)} h ago`;
+  return `${Math.floor(diffHours / 24)} d ago`;
+}
 /**
  * A tiny localStorage hook — survives reloads, no library needed.
  *
@@ -130,6 +150,9 @@ const emptyTask = {
   startDate: '',
   dueDate: '',
   createdDate: '',
+  context: CONTEXT_TEMPLATE,
+  contextTool: 'ChatGPT',
+  contextUpdatedAt: null,
 };
 
 // --- CUSTOM AUDIO HOOK ---
@@ -269,10 +292,19 @@ export default function App() {
           onClick={() => {
             playCreate(); // PLAYS THE CREATE SOUND
             setEditing({
-              ...emptyTask,
-              id: Date.now().toString(),
-              createdDate: new Date().toISOString().split('T')[0],
-            });
+      ...emptyTask,
+      id: Date.now().toString(),
+      createdDate: new Date().toISOString().split('T')[0],
+      context: `## Background
+
+## Constraints
+
+## Tried so far
+
+## Pick up
+
+`,
+});
           }}
           className="rounded bg-brand-primary hover:bg-brand-primary/80 transition-colors px-4 py-2 text-white font-bold"
         >
@@ -414,12 +446,58 @@ function TaskModal({ task, onSave, onDelete, onClose }) {
           className="mb-3 w-full border p-2 text-slate-900 rounded"
         />
 
+<label className="mb-1 block text-sm text-slate-700 font-semibold">
+  Context
+</label>
         <textarea
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          placeholder="Description"
-          className="mb-3 w-full border p-2 text-slate-900 rounded"
-        />
+  value={form?.context ?? ''}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    setForm({
+      ...form,
+      context: value,
+      contextUpdatedAt: new Date().toISOString(),
+    });
+  }}
+  placeholder="## Background
+
+## Constraints
+
+## Tried so far
+
+## Pick up"
+  className="mb-1 w-full border p-2 text-slate-900 rounded h-32 font-mono"
+/>
+
+<select
+  value={form.contextTool || 'ChatGPT'}
+  onChange={(e) =>
+    setForm({
+      ...form,
+      contextTool: e.target.value,
+      contextUpdatedAt: new Date().toISOString(),
+    })
+  }
+  className="mb-3 w-full border p-2 text-slate-900 rounded"
+>
+  <option>Claude</option>
+  <option>ChatGPT</option>
+  <option>Cursor</option>
+  <option>Lovable</option>
+  <option>Replit</option>
+  <option>Other</option>
+</select>
+
+<div className="mb-3 text-xs text-slate-500 flex justify-between">
+  <span>
+    last updated {getRelativeTime(form.contextUpdatedAt)}
+  </span>
+
+  <span>
+    via {form.contextTool}
+  </span>
+</div>
 
         <select
           value={form.type}
