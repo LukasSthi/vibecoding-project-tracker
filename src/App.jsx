@@ -155,6 +155,13 @@ const emptyTask = {
   contextUpdatedAt: null,
 };
 
+const DEFAULT_ANCHORS = {
+  presentation: '',
+  demo: '',
+  report: '',
+  documentation: '',
+};
+
 // --- CUSTOM AUDIO HOOK ---
 export function useUISounds() {
   const playClick = useCallback(() => {
@@ -278,6 +285,11 @@ export default function App() {
     seedTasks
   );
 
+  const [anchors, setAnchors] = useLocalStorage(
+  'vibetracker.anchors',
+  DEFAULT_ANCHORS
+);
+
   const [editing, setEditing] = useState(null);
   
   // Bring the sounds into the main app
@@ -338,6 +350,50 @@ export default function App() {
           + Start New
         </button>
       </header>
+
+<section className="mb-6">
+
+  <div className="grid grid-cols-4 gap-4">
+    {[
+      ['presentation', 'Presentation'],
+      ['demo', 'Demo'],
+      ['report', 'Report'],
+      ['documentation', 'Documentation'],
+    ].map(([key, label]) => (
+      <div
+        key={key}
+        className="rounded-lg bg-slate-900/40 backdrop-blur-md p-4 border border-white/10"
+      >
+        <div className="mb-2 flex items-center justify-between">
+          <span className="font-semibold text-white">
+            {label}
+          </span>
+
+          <div
+            className={`h-3 w-3 rounded-full ${
+              anchors[key]
+                ? 'bg-green-400'
+                : 'bg-red-400'
+            }`}
+          />
+        </div>
+
+        <input
+          type="url"
+          value={anchors[key]}
+          onChange={(e) =>
+            setAnchors({
+              ...anchors,
+              [key]: e.target.value,
+            })
+          }
+          placeholder="https://..."
+          className="w-full rounded border border-slate-300 p-2 text-sm text-slate-900"
+        />
+      </div>
+    ))}
+  </div>
+</section>
 
       <main className="grid grid-cols-4 gap-4">
         {STAGES.map((stage) => (
