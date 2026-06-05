@@ -26,7 +26,7 @@ export default {
       fontFamily: {
         // Defines custom utility classes: font-heading, font-body, font-mono
         heading: ['"SST Condensed Bold"', 'sans-serif'],
-        body: ['"SST Light"', 'sans-serif'],
+        sans: ['"SST Light"', 'sans-serif'],
         mono: ['"SST Italic"', 'monospace'],
       },
       boxShadow: {
