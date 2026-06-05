@@ -272,13 +272,20 @@ export default function App() {
   {task.type.toUpperCase()}
 </span>
 
-                    <p className="text-sm text-slate-500">
-                      {task.assignee}
-                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
+    {task.assignee.charAt(0)}
+  </div>
+
+  <span className="text-sm text-slate-500">
+    {task.assignee}
+  </span>
+</div>
 
                     <p className="text-xs text-slate-400">
                       Due: {task.dueDate || '-'}
                     </p>
+                    
                   </div>
                 ))}
             </div>
