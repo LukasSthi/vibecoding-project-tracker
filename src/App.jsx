@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 /**
  * Vibecoding Project Tracker — starter scaffold.
@@ -132,7 +132,30 @@ const emptyTask = {
   createdDate: '',
 };
 
-// --- ANIMATED BACKGROUND COMPONENT ADDED HERE ---
+// --- CUSTOM AUDIO HOOK ---
+export function useUISounds() {
+  const playClick = useCallback(() => {
+    const audio = new Audio('/sounds/click.mp3');
+    audio.volume = 0.4;
+    audio.play().catch(() => {});
+  }, []);
+
+  const playCreate = useCallback(() => {
+    const audio = new Audio('/sounds/create.mp3');
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+  }, []);
+
+  const playDelete = useCallback(() => {
+    const audio = new Audio('/sounds/delete.mp3');
+    audio.volume = 0.6;
+    audio.play().catch(() => {});
+  }, []);
+
+  return { playClick, playCreate, playDelete };
+}
+
+// --- ANIMATED BACKGROUND COMPONENT ---
 function PSBackground() {
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden bg-gradient-to-br from-[#725CFF] to-[#344085]">
@@ -161,7 +184,7 @@ function PSBackground() {
     </div>
   );
 }
-// ------------------------------------------------
+
 function getTaskTypeClasses(type) {
   return type === 'feature'
     ? 'border-l-4 border-type-feature'
@@ -175,6 +198,9 @@ export default function App() {
   );
 
   const [editing, setEditing] = useState(null);
+  
+  // Bring the sounds into the main app
+  const { playClick, playCreate } = useUISounds();
 
   function saveTask(task) {
     const exists = tasks.some((t) => t.id === task.id);
@@ -209,13 +235,14 @@ export default function App() {
           </p>
         </div>
         <button
-          onClick={() =>
+          onClick={() => {
+            playCreate(); // PLAYS THE CREATE SOUND
             setEditing({
               ...emptyTask,
               id: Date.now().toString(),
               createdDate: new Date().toISOString().split('T')[0],
-            })
-          }
+            });
+          }}
           className="rounded bg-brand-primary hover:bg-brand-primary/80 transition-colors px-4 py-2 text-white font-bold"
         >
           + Start New
@@ -238,51 +265,55 @@ export default function App() {
                 .map((task) => (
                   <div
                     key={task.id}
-                    onClick={() => setEditing(task)}
+                    onClick={() => {
+                      playClick(); // PLAYS THE CLICK SOUND
+                      setEditing(task);
+                    }}
                     className={`
-  cursor-pointer rounded bg-white text-slate-900 p-3 shadow
-  hover:shadow-[0_0_15px_2px_rgba(255,255,255,0.3)]
-  hover:border-white
-  border border-transparent
-  transition-all
-  ${getTaskTypeClasses(task.type)}
-`}
+                      cursor-pointer rounded bg-white text-slate-900 p-3 shadow
+                      hover:shadow-[0_0_15px_2px_rgba(255,255,255,0.3)]
+                      hover:border-white
+                      border border-transparent
+                      transition-all
+                      ${getTaskTypeClasses(task.type)}
+                    `}
                   >
                     <div className="flex items-start justify-between">
-  <p className="font-semibold">
-    {task.title}
-  </p>
+                      <p className="font-semibold">
+                        {task.title}
+                      </p>
 
-  <p className="text-xs text-slate-400">
-  ID: {task.id}
-</p>
+                      <p className="text-xs text-slate-400">
+                        ID: {task.id}
+                      </p>
 
-  <span className="text-lg">
-    {task.type === 'feature' ? '✨' : '🐞'}
-  </span>
-</div>
-<span
-  className={`inline-block rounded px-2 py-1 text-xs font-bold text-white
-  ${
-    task.type === 'feature'
-      ? 'bg-type-feature'
-      : 'bg-type-bug'
-  }`}
->
-  {task.type.toUpperCase()}
-</span>
+                      <span className="text-lg">
+                        {task.type === 'feature' ? '✨' : '🐞'}
+                      </span>
+                    </div>
+                    
+                    <span
+                      className={`inline-block rounded px-2 py-1 text-xs font-bold text-white
+                      ${
+                        task.type === 'feature'
+                          ? 'bg-type-feature'
+                          : 'bg-type-bug'
+                      }`}
+                    >
+                      {task.type.toUpperCase()}
+                    </span>
 
                     <div className="mt-2 flex items-center gap-2">
-  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
-    {task.assignee.charAt(0)}
-  </div>
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
+                        {task.assignee.charAt(0)}
+                      </div>
 
-  <span className="text-sm text-slate-500">
-    {task.assignee}
-  </span>
-</div>
+                      <span className="text-sm text-slate-500">
+                        {task.assignee}
+                      </span>
+                    </div>
 
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-400 mt-2">
                       Due: {task.dueDate || '-'}
                     </p>
                     
@@ -307,38 +338,42 @@ export default function App() {
 
 function TaskModal({ task, onSave, onDelete, onClose }) {
   const [form, setForm] = useState(task);
+  
+  // Bring the sounds into the modal
+  const { playClick, playDelete } = useUISounds();
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div
-  className={`
-    w-full max-w-lg rounded p-6 shadow-2xl bg-white
-    border-t-8
-    ${
-      form.type === 'feature'
-        ? 'border-type-feature'
-        : 'border-type-bug'
-    }
-  `}
->
-  <div className="mb-4 flex items-center justify-between">
-  <h2 className="text-xl font-bold">
-    {form.id ? 'Edit Task' : 'New Task'}
-  </h2>
+        className={`
+          w-full max-w-lg rounded p-6 shadow-2xl bg-white
+          border-t-8
+          ${
+            form.type === 'feature'
+              ? 'border-type-feature'
+              : 'border-type-bug'
+          }
+        `}
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-bold">
+            {form.id ? 'Edit Task' : 'New Task'}
+          </h2>
 
-  <span
-    className={`rounded px-3 py-1 text-sm font-bold text-white
-    ${
-      form.type === 'feature'
-        ? 'bg-type-feature'
-        : 'bg-type-bug'
-    }`}
-  >
-    {form.type === 'feature'
-      ? '✨ FEATURE'
-      : '🐞 BUG'}
-  </span>
-</div>
+          <span
+            className={`rounded px-3 py-1 text-sm font-bold text-white
+            ${
+              form.type === 'feature'
+                ? 'bg-type-feature'
+                : 'bg-type-bug'
+            }`}
+          >
+            {form.type === 'feature'
+              ? '✨ FEATURE'
+              : '🐞 BUG'}
+          </span>
+        </div>
+        
         <input
           value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
@@ -401,7 +436,10 @@ function TaskModal({ task, onSave, onDelete, onClose }) {
 
         <div className="flex justify-between mt-4">
           <button
-            onClick={() => onDelete(form.id)}
+            onClick={() => {
+              playDelete(); // PLAYS THE DELETE SOUND
+              onDelete(form.id);
+            }}
             className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
           >
             Delete
@@ -409,14 +447,20 @@ function TaskModal({ task, onSave, onDelete, onClose }) {
 
           <div className="space-x-2">
             <button
-              onClick={onClose}
+              onClick={() => {
+                playClick(); // PLAYS THE CLICK SOUND
+                onClose();
+              }}
               className="rounded border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50"
             >
               Cancel
             </button>
 
             <button
-              onClick={() => onSave(form)}
+              onClick={() => {
+                playClick(); // PLAYS THE CLICK SOUND
+                onSave(form);
+              }}
               className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
             >
               Save
