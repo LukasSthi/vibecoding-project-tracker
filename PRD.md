@@ -111,13 +111,13 @@ Fill in the owner column. Recommended default in **bold**; change if your team h
 | 4 | `data-model` | Task model + board view | **A&B** | `Lukas and Ben` |
 | 5 | `crud-modal` | Add / edit / delete modal | **A&B** | `Lukas and Ben` |
 | 6 | `tag-style` | Feature / bug colors | **A&B** | `Lukas and Ben` |
-| 7 | `task-owner` | Owner indicator + handoff | **A** | `<TODO>` |
-| 8 | `due-tint` | Due-date color tinting | **B** | `<TODO>` |
-| 9 | `context` | Context field on the task modal | **C** | `<TODO>` |
-| 10 | `copy-prompt` | "Copy as Prompt Context" button | **C** | `<TODO>` |
-| 11 | `anchors` | Deliverable Anchor Board | **B** | `<TODO>` |
+| 7 | `task-owner` | Owner indicator + handoff | **A** | `Lukas` |
+| 8 | `due-tint` | Due-date color tinting | **A** | `Lukas` |
+| 9 | `context` | Context field on the task modal | **C** | `Ben` |
+| 10 | `copy-prompt` | "Copy as Prompt Context" button | **A** | `Lukas` |
+| 11 | `anchors` | Deliverable Anchor Board | **C** | `Ben` |
 | 12 | `secret-sauce` | The one thing that makes it yours | **B** | `Marcel` |
-| 13 | `pitch-ready` | Demo + pitch rehearsal | **All** | `<TODO>` |
+| 13 | `pitch-ready` | Demo + pitch rehearsal | **All** | `Marcel` |
 
 
 Track A owns the state model and task ownership. Track B owns the visuals (and design — M3 runs parallel to M2 so the team starts Phase 3 with the palette already chosen). Track C owns the differentiator features (M9 + M10 — the context field and the Copy-as-Prompt button) and usually leads on M12 secret-sauce. Put your strongest prompter on Track C.

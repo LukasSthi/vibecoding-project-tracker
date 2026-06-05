@@ -309,7 +309,7 @@ export default function App() {
       <header className="mb-6 flex items-end justify-between">
         <div>
           <h1 className="text-4xl font-heading text-white tracking-widest-ps uppercase drop-shadow-md">
-            PLAYTRACK
+            TaskStation
           </h1>
           <p className="text-sm text-brand-accent/80">
             Manly Mod-Rock
