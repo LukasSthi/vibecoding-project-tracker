@@ -44,7 +44,7 @@ export const STAGES = [
 
 // Replace these placeholders with the three names from PRD §8 before M4.
 // They become the only valid values for `Task.assignee`.
-export const TEAM = ['Teammate A', 'Teammate B', 'Teammate C'];
+export const TEAM = ['Lukas', 'Marcel', 'Ben'];
 
 /**
  * A tiny localStorage hook — survives reloads, no library needed.
@@ -72,10 +72,56 @@ export function useLocalStorage(key, initialValue) {
 
   return [value, setValue];
 }
+const seedTasks = [
+  {
+    id: '1',
+    title: 'Create Login Page',
+    description: 'Build login UI',
+    type: 'feature',
+    status: 'todo',
+    assignee: 'Lukas',
+    dueDate: null,
+    createdDate: '2025-08-15',
+  },
+  {
+    id: '2',
+    title: 'Fix Navbar Bug',
+    description: 'Dropdown does not open',
+    type: 'bug',
+    status: 'in-progress',
+    assignee: 'Marcel',
+    dueDate: null,
+    createdDate: '2025-08-15',
+  },
+  {
+    id: '3',
+    title: 'Review Board Layout',
+    description: 'Check UI',
+    type: 'feature',
+    status: 'review',
+    assignee: 'Ben',
+    dueDate: null,
+    createdDate: '2025-08-15',
+  },
+  {
+    id: '4',
+    title: 'Deploy App',
+    description: 'Deploy to Vercel',
+    type: 'feature',
+    status: 'done',
+    assignee: 'Lukas',
+    dueDate: null,
+    createdDate: '2025-08-15',
+  },
+];
 
 export default function App() {
   // TODO M4 data-model:
   //   const [tasks, setTasks] = useLocalStorage('vibetracker.tasks', [/* 3-4 seed tasks */]);
+  const [tasks] = useLocalStorage(
+  'vibetracker.tasks',
+  seedTasks
+);
   //
   // TODO M5 crud-modal:
   //   const [editing, setEditing] = useState(null);
@@ -92,7 +138,7 @@ export default function App() {
           </h1>
           <p className="text-sm text-slate-500">
             {/* Replace this line with your team name from PRD §11. */}
-            Team starter
+            Manly Mod-Rock
           </p>
         </div>
       </header>
@@ -109,9 +155,41 @@ export default function App() {
           Add a "+" button that opens a modal with every Task field.
           Clicking a card should open the same modal in edit mode.
       */}
-      <main className="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-slate-400">
+      {/*<main className="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-slate-400">
         Build the four-column board here · M4
       </main>
+      */}
+      <main className="grid grid-cols-4 gap-4">
+  {STAGES.map((stage) => (
+    <div
+      key={stage.id}
+      className="rounded-lg bg-slate-100 p-4"
+    >
+      <h2 className="mb-4 font-bold">
+        {stage.label}
+      </h2>
+
+      <div className="space-y-3">
+        {tasks
+          .filter((task) => task.status === stage.id)
+          .map((task) => (
+            <div
+              key={task.id}
+              className="rounded bg-white p-3 shadow"
+            >
+              <p className="font-semibold">
+                {task.title}
+              </p>
+
+              <p className="text-sm text-slate-500">
+                {task.assignee}
+              </p>
+            </div>
+          ))}
+      </div>
+    </div>
+  ))}
+</main>
     </div>
   );
 }
