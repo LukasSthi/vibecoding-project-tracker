@@ -107,16 +107,16 @@ Fill in the owner column. Recommended default in **bold**; change if your team h
 
 | # | Tag | Title | Suggested owner | Final owner |
 |---|---|---|---|---|
-| 3 | `design-done` | Design system + voice (DESIGN.md) | **B** | `<TODO>` |
-| 4 | `data-model` | Task model + board view | **A** | `<TODO>` |
-| 5 | `crud-modal` | Add / edit / delete modal | **A** | `<TODO>` |
-| 6 | `tag-style` | Feature / bug colors | **B** | `<TODO>` |
+| 3 | `design-done` | Design system + voice (DESIGN.md) | **B** | `Marcel` |
+| 4 | `data-model` | Task model + board view | **A&B** | `Lukas and Ben` |
+| 5 | `crud-modal` | Add / edit / delete modal | **A&B** | `Lukas and Ben` |
+| 6 | `tag-style` | Feature / bug colors | **A&B** | `Lukas and Ben` |
 | 7 | `task-owner` | Owner indicator + handoff | **A** | `<TODO>` |
 | 8 | `due-tint` | Due-date color tinting | **B** | `<TODO>` |
 | 9 | `context` | Context field on the task modal | **C** | `<TODO>` |
 | 10 | `copy-prompt` | "Copy as Prompt Context" button | **C** | `<TODO>` |
 | 11 | `anchors` | Deliverable Anchor Board | **B** | `<TODO>` |
-| 12 | `secret-sauce` | The one thing that makes it yours | **C / All** | `<TODO>` |
+| 12 | `secret-sauce` | The one thing that makes it yours | **B** | `Marcel` |
 | 13 | `pitch-ready` | Demo + pitch rehearsal | **All** | `<TODO>` |
 
 
