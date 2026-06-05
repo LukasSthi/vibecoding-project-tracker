@@ -162,6 +162,11 @@ function PSBackground() {
   );
 }
 // ------------------------------------------------
+function getTaskTypeClasses(type) {
+  return type === 'feature'
+    ? 'border-l-4 border-type-feature'
+    : 'border-l-4 border-type-bug';
+}
 
 export default function App() {
   const [tasks, setTasks] = useLocalStorage(
@@ -234,11 +239,34 @@ export default function App() {
                   <div
                     key={task.id}
                     onClick={() => setEditing(task)}
-                    className="cursor-pointer rounded bg-white text-slate-900 p-3 shadow hover:shadow-[0_0_15px_2px_rgba(255,255,255,0.3)] hover:border-white border border-transparent transition-all"
+                    className={`
+  cursor-pointer rounded bg-white text-slate-900 p-3 shadow
+  hover:shadow-[0_0_15px_2px_rgba(255,255,255,0.3)]
+  hover:border-white
+  border border-transparent
+  transition-all
+  ${getTaskTypeClasses(task.type)}
+`}
                   >
-                    <p className="font-semibold">
-                      {task.title}
-                    </p>
+                    <div className="flex items-start justify-between">
+  <p className="font-semibold">
+    {task.title}
+  </p>
+
+  <span className="text-lg">
+    {task.type === 'feature' ? '✨' : '🐞'}
+  </span>
+</div>
+<span
+  className={`inline-block rounded px-2 py-1 text-xs font-bold text-white
+  ${
+    task.type === 'feature'
+      ? 'bg-type-feature'
+      : 'bg-type-bug'
+  }`}
+>
+  {task.type.toUpperCase()}
+</span>
 
                     <p className="text-sm text-slate-500">
                       {task.assignee}
@@ -271,7 +299,35 @@ function TaskModal({ task, onSave, onDelete, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded bg-white p-6 shadow-2xl">
+      <div
+  className={`
+    w-full max-w-lg rounded p-6 shadow-2xl bg-white
+    border-t-8
+    ${
+      form.type === 'feature'
+        ? 'border-type-feature'
+        : 'border-type-bug'
+    }
+  `}
+>
+  <div className="mb-4 flex items-center justify-between">
+  <h2 className="text-xl font-bold">
+    {form.id ? 'Edit Task' : 'New Task'}
+  </h2>
+
+  <span
+    className={`rounded px-3 py-1 text-sm font-bold text-white
+    ${
+      form.type === 'feature'
+        ? 'bg-type-feature'
+        : 'bg-type-bug'
+    }`}
+  >
+    {form.type === 'feature'
+      ? '✨ FEATURE'
+      : '🐞 BUG'}
+  </span>
+</div>
         <input
           value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
